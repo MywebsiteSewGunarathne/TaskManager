@@ -1,0 +1,29 @@
+{
+  "task": [
+    {
+      "name": "Complete Homework",
+      "description": "Finish the assigned homework for today's lessons, ensuring all questions are answered neatly and correctly. ",
+      "id": "1"
+    },
+    {
+      "id": "3",
+      "name": "Read a Chapter from Book   ....",
+      "description": "Read one chapter from your assigned reading book or textbook. "
+    },
+    {
+      "id": "4",
+      "name": "Bug Fix - Payment Gateway",
+      "description": "Investigate and resolve the bug in the payment gateway affecting Visa card payments."
+    },
+    {
+      "id": "5",
+      "name": "Update Website Banner",
+      "description": "Design and update the homepage banner for the summer promotion campaign."
+    },
+    {
+      "id": "6",
+      "name": " Write Social Media Posts",
+      "description": "Write and schedule social media posts for the upcoming product launch."
+    }
+  ]
+}
