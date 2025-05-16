@@ -2,54 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { TASK_API_URL } from "../constant";
 import { confirmAlert } from "react-confirm-alert";
+import { useTasks } from './TaskContext';
 const TaskCreate = () => {
 
-    const [taskData, setTaskData] = useState("")
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [loadingTaskId, setLoadingTaskId] = useState(null);
-    const navigate = useNavigate();
+    
 
-    const SaveAlert = () => {
-        const taskData = { name, description };
-        setLoadingTaskId(true); 
-        confirmAlert({
-            title: 'Confirm to Save',
-            message: 'Are you sure you want to save this task?',
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => {
-                        fetch(TASK_API_URL, {
-                            method: "POST",
-                            headers: { "content-type": "application/json" },
-                            body: JSON.stringify(taskData)
-                        }).then((res) => res.json())
-                            .then((data) => {
-                                alert('Saved Successfully ' + data.id);
-                                navigate('/');
-                            }).catch((err) => {
-                                console.log(err.message);
-                            }).finally(() => {
-                                setLoadingTaskId(null);
-                            });
-                    }
-                },
-                {
-                    label: 'No',
-                    onClick: () => {
-                        setLoadingTaskId(null);
-                    }
-                }
-            ]
-        });
-    }
-
+    const { taskData, setTaskData, name, setName, description, setDescription, loadingTaskId, setLoadingTaskId, CreateAlert } = useTasks();
 
     const handlesubmit = (e) => {
         e.preventDefault();
         const listdata = ({ name, description });
-
 
 
         /* fetch(TASK_API_URL, {
@@ -88,7 +50,7 @@ const TaskCreate = () => {
                                     <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder="Enter task description" />
                                 </div>
                                 <div className="form-group">
-                                    <button type="button" onClick={SaveAlert} className="btn btn-edit">Save</button>
+                                    <button type="button" onClick={()=>CreateAlert (name, description)} className="btn btn-edit">Save</button>
                                     <Link to="/" className="btn btn-remove">Back</Link>
 
                                 </div>
