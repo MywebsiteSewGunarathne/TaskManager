@@ -1,21 +1,23 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { TASK_API_URL } from "../constant";
 const TaskCreate = () => {
-    const [id, idchange] = useState("");
-    const [name, namechange] = useState("");
-    const [description, descriptionchange] = useState("");
+    
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const navigate = useNavigate();
     const handlesubmit=(e)=>{
         e.preventDefault();
-        const listdata = ({id, name, description});
+        const listdata = ({name, description});
         
-        fetch("http://localhost:8000/task",{
+        fetch(TASK_API_URL,{
             method:"POST",
             headers:{"content-type":"application/json"},
             body:JSON.stringify(listdata)
              
-        }).then ((res)=>{
-            alert('Saved Successfully')
+        }).then ((res)=>res.json())
+        .then((data)=>{
+            alert('Saved Successfully ' + data.id)
             navigate('/')
 
         }).catch((err)=>{ 
@@ -34,17 +36,14 @@ const TaskCreate = () => {
                         </div>
                         <div className="form-container" style={{textAlign:"left"}}>
                             <form>
-                                <div className="form-group">
-                                    <lable>ID</lable>
-                                    <input value={id} onChange={e=>idchange(e.target.value)} type="text" placeholder="Enter task id" />
-                                </div>
+                                
                                 <div className="form-group">
                                     <lable>Name</lable>
-                                    <input value={name} onChange={e=>namechange(e.target.value)}  type="text" placeholder="Enter task name" />
+                                    <input value={name} onChange={e=>setName(e.target.value)}  type="text" placeholder="Enter task name" />
                                 </div>
                                 <div className="form-group">
                                     <lable>Description</lable>
-                                    <input value={description} onChange={e=>descriptionchange(e.target.value)} type="text" placeholder="Enter task description" />
+                                    <input value={description} onChange={e=>setDescription(e.target.value)} type="text" placeholder="Enter task description" />
                                 </div>
                                 <div className="form-group">
                                     <button className="btn btn-edit">Save</button>

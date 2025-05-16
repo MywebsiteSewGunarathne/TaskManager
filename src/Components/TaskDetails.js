@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { TASK_API_URL_SLASH } from "../constant";
 
 const TaskDetails = () => {
     const { taskid } = useParams();
@@ -8,7 +9,7 @@ const TaskDetails = () => {
     
 
     useEffect(() => {
-        fetch("http://localhost:8000/task/" + taskid)
+        fetch(TASK_API_URL_SLASH + taskid)
             .then((res) => {
                 return res.json();
             })

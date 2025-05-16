@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { TASK_API_URL_SLASH } from "../constant";
 
 const TaskEdit = () => {
     const { taskid } = useParams();
@@ -10,29 +11,29 @@ const TaskEdit = () => {
 
 
     useEffect(() => {
-        fetch("http://localhost:8000/task/" + taskid)
+        fetch(TASK_API_URL_SLASH + taskid)
             .then((res) => {
                 return res.json();
             })
             .then((resp) => {
-                idchange(resp.id);
-                namechange(resp.name);
-                descriptionchange(resp.description);
+                setId(resp.id);
+                setName(resp.name);
+                setDescription(resp.description);
             })
             .catch((err) => {
                 console.log(err.message);
             });
     }, []);
 
-    const [id, idchange] = useState("");
-    const [name, namechange] = useState("");
-    const [description, descriptionchange] = useState("");
+    const [id, setId] = useState("");
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const navigate = useNavigate();
     const handlesubmit = (e) => {
         e.preventDefault();
         const listdata = ({ id, name, description });
 
-        fetch("http://localhost:8000/task/" + taskid,{
+        fetch(TASK_API_URL_SLASH + taskid,{
             method: "PUT",
             headers: { "content-type": "application/json" },
             body: JSON.stringify(listdata)
@@ -64,11 +65,11 @@ const TaskEdit = () => {
                                 </div>
                                 <div className="form-group">
                                     <lable>Name</lable>
-                                    <input value={name} onChange={e => namechange(e.target.value)} type="text" placeholder="Enter task name" />
+                                    <input value={name} onChange={e => setName(e.target.value)} type="text" placeholder="Enter task name" />
                                 </div>
                                 <div className="form-group">
                                     <lable>Description</lable>
-                                    <input value={description} onChange={e => descriptionchange(e.target.value)} type="text" placeholder="Enter task description" />
+                                    <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder="Enter task description" />
                                 </div>
                                 <div className="form-group">
                                     <button className="btn btn-edit">Save</button>
