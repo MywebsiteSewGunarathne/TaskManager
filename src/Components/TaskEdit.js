@@ -3,17 +3,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { TASK_API_URL_SLASH } from "../constant";
 import { confirmAlert } from "react-confirm-alert";
+import { useTasks } from './TaskContext';
 
 const TaskEdit = () => {
+
+    const { id, setId, name, setName, description, setDescription, loadingTaskId, setLoadingTaskId, SaveAlert } = useTasks();
+
     const { taskid } = useParams();
-
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [loadingTaskId, setLoadingTaskId] = useState(null);
-
-    const navigate = useNavigate();
-
     useEffect(() => {
         fetch(TASK_API_URL_SLASH + taskid)
             .then((res) => res.json())
@@ -27,39 +23,7 @@ const TaskEdit = () => {
             });
     }, [taskid]);
 
-    const SaveAlert = () => {
-        const listdata = { id, name, description };
-        setLoadingTaskId(true);
-        confirmAlert({
-            title: 'Confirm to Save',
-            message: 'Are you sure you want to update this task?',
-            buttons: [
-                {
-                    label: 'Yes',
-                    onClick: () => {
-                        fetch(TASK_API_URL_SLASH + taskid, {
-                            method: "PUT",
-                            headers: { "content-type": "application/json" },
-                            body: JSON.stringify(listdata)
-                        }).then((res) => {
-                            alert('Updated Successfully');
-                            navigate('/');
-                        }).catch((err) => {
-                            console.log(err.message);
-                        }).finally(() => {
-                            setLoadingTaskId(null);
-                        });
-                    }
-                },
-                {
-                    label: 'No',
-                    onClick: () => {
-                        setLoadingTaskId(null);
-                    }
-                }
-            ]
-        });
-    };
+    
 
     return (
         <div>
@@ -84,7 +48,7 @@ const TaskEdit = () => {
                                     <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder="Enter task description" />
                                 </div>
                                 <div className="form-group">
-                                    <button type="button" onClick={SaveAlert} className="btn btn-edit">Save</button>
+                                    <button type="button" onClick={() =>SaveAlert (taskid, id, name, description)} className="btn btn-edit">Save</button>
                                     <Link to="/" className="btn btn-remove">Back</Link>
                                 </div>
                             </form>
