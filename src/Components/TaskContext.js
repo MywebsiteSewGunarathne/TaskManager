@@ -13,7 +13,7 @@ export const TaskProvider = ({ children }) => {
     const [id, setId] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-
+ 
     const navigate = useNavigate();
     
         const LoadDetail = (id) => {

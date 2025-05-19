@@ -4,9 +4,6 @@ import { TASK_API_URL } from "../constant";
 import { confirmAlert } from "react-confirm-alert";
 import { useTasks } from './TaskContext';
 const TaskCreate = () => {
-
-    
-
     const { taskData, setTaskData, name, setName, description, setDescription, loadingTaskId, setLoadingTaskId, CreateAlert } = useTasks();
 
     const handlesubmit = (e) => {
