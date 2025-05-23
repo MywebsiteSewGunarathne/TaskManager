@@ -1,5 +1,5 @@
-// src/components/TaskList.js
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState, useCallback , useMemo} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -27,11 +27,11 @@ const TaskList = () => {
   }, [status, dispatch]);
 
 
-  const LoadDetail = (id) => navigate('/task/details/' + id);
-  const LoadEdit = (id) => navigate('/task/edit/' + id);
+  const LoadDetail = useCallback((id) => navigate('/task/details/' + id), [navigate]);
+  const LoadEdit = useCallback((id) => navigate('/task/edit/' + id), [navigate]);
 
 
-  const RemoveFunction = (id) => {
+  const RemoveFunction = useCallback((id) => {
     confirmAlert({
       title: 'Confirm to delete',
       message: 'Are you sure you want to delete this task?',
@@ -45,21 +45,21 @@ const TaskList = () => {
         }
       ]
     });
-  };
+  }, [dispatch]);
 
 
-  const handleDeleteDirect = (id) => {
+  const handleDeleteDirect = useCallback((id) => {
     dispatch(deleteTask(id));
-  };
+  }, [dispatch]);
 
 
-  const tapTaskCross = (id) => {
+  const tapTaskCross = useCallback((id) => {
     if (crossOverTask.includes(id)) {
       setCrossOverTask(prev => prev.filter(taskId => taskId !== id));
     } else {
       setCrossOverTask(prev => [...prev, id]);
     }
-  };
+  },[]);
 
   const TaskRow = ({ item }) => {
     const handlers = useSwipeable({
@@ -98,13 +98,13 @@ const TaskList = () => {
           >
             Edit
           </a>
-          <button
+          <a
             onClick={() => RemoveFunction(item.id)}
             className="btn btn-remove"
             disabled={loadingTaskId === item.id}
           >
             {loadingTaskId === item.id ? 'Loading...' : 'Delete'}
-          </button>
+          </a>
 
           <a onClick={() => LoadDetail(item.id)} className="btn btn-details">
             Details
@@ -113,6 +113,17 @@ const TaskList = () => {
       </tr>
     );
   };
+
+  const renderedTaskRows = useMemo(() => {
+    return tasks.map(item => (
+      <TaskRow
+        key={item.id}
+        item={item}
+      />
+    ));
+
+    
+  }, [tasks, crossOverTask, tapTaskCross, handleDeleteDirect, loadingTaskId]);
 
   return (
     <div className="container">
@@ -126,19 +137,7 @@ const TaskList = () => {
           </div>
 
           <table className="my-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tasks && tasks.map(item => (
-                <TaskRow key={item.id} item={item} />
-              ))}
-            </tbody>
+            <tbody>{renderedTaskRows}</tbody>
           </table>
         </div>
       </div>

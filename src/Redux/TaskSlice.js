@@ -17,7 +17,6 @@ export const fetchTasksById = createAsyncThunk('tasks/fetchTasksById', async (id
 
 //delete
 export const deleteTask = createAsyncThunk('task/deleteTask', async (id) => {
-  await new Promise(res => setTimeout(res, 2000));  // 2 seconds delay
   await axios.delete(`${TASK_API_URL_SLASH}${id}`);
   return id;
 });
